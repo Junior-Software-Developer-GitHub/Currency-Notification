@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSystem", "NotificationSystem\NotificationSystem.csproj", "{0B7943D0-7884-4BB1-B2F4-F1DCF865CB89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{331E64BD-0526-4F14-962B-F744DAA4CD77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B7943D0-7884-4BB1-B2F4-F1DCF865CB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7943D0-7884-4BB1-B2F4-F1DCF865CB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7943D0-7884-4BB1-B2F4-F1DCF865CB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7943D0-7884-4BB1-B2F4-F1DCF865CB89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331E64BD-0526-4F14-962B-F744DAA4CD77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331E64BD-0526-4F14-962B-F744DAA4CD77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331E64BD-0526-4F14-962B-F744DAA4CD77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331E64BD-0526-4F14-962B-F744DAA4CD77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
