@@ -1,6 +1,6 @@
 using System;
 using Data.Models.User;
-using NotificationSystem.Services.Mail.Interface;
+using NotificationSystem.Services.Message.Interface;
 using NotificationSystem.Services.Scheduler.Interface;
 
 namespace NotificationSystem.Services.Scheduler

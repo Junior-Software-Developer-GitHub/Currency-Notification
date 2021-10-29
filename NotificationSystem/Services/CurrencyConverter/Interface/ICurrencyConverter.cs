@@ -1,6 +1,4 @@
-using Data.Models;
 using Data.Models.Converter;
-using Data.Models.ExchangeList;
 
 namespace NotificationSystem.Services.CurrencyConverter.Interface
 {
