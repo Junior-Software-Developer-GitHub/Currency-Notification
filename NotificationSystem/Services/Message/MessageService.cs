@@ -48,38 +48,47 @@ namespace NotificationSystem.Services.Message
         {
             string country = String.Empty;
             string amount = String.Empty;
-            User user = new User();
 
-            if (e.Message.Text.Equals("/paises") || e.Message.Text.Equals("/countries"))
+            try
             {
-                BotClient.SendTextMessageAsync(e.Message.Chat.Id, CountriesList(user.LanguageId));
-                return;
-            }
-            
-            else if (Regex.Matches(e.Message.Text.Substring(0,2), @"[a-zA-Z]").Count > 0)//if you send country name
-            {
-                country = e.Message.Text.Substring(0, 2);
-                amount = e.Message.Text.Substring(3);
-                
-            }
-            
-            else if (e.Message.Text.Contains("."))//if you send an ip address
-            {
-                int index = e.Message.Text.IndexOf(' ');
+                User user = new User();
 
-                string ip = e.Message.Text.Substring(0, index);
-            
-                amount = e.Message.Text.Substring(index + 1);
-            
-                country = _locationService.GetCountryByIP(ip);
+                if (e.Message.Text.Equals("/paises") || e.Message.Text.Equals("/countries")) //list of countries
+                {
+                    BotClient.SendTextMessageAsync(e.Message.Chat.Id, CountriesList(user.LanguageId));
+                    return;
+                }
+
+                else if (Regex.Matches(e.Message.Text.Substring(0, 2), @"[a-zA-Z]").Count > 0) //if you send country name
+                {
+                    country = e.Message.Text.Substring(0, 2);
+                    amount = e.Message.Text.Substring(3);
+
+                }
+
+                else if (e.Message.Text.Contains(".")) //if you send an ip address
+                {
+                    int index = e.Message.Text.IndexOf(' ');
+                    string ip = e.Message.Text.Substring(0, index);
+                    amount = e.Message.Text.Substring(index + 1);
+                    country = _locationService.GetCountryByIP(ip);
+                }
+
+                var currency = GetCurrencyDependsOnCountry(country);
+                var culture = GetCultureInfo(user.LanguageId);
+                var rm = new ResourceManager(typeof(Data.Translations.Content));
+
+                var value = _currencyConverter.Convert(user.Currency + "/" + currency + "/" + amount).result.value;
+                BotClient.SendTextMessageAsync(e.Message.Chat.Id,
+                    rm.GetString("YouAreIn", culture) + country + ", " + amount + " " + user.Currency +
+                    rm.GetString("Is", culture) + value + " " + currency);
+            }
+            catch (Exception exception)
+            {
+                e.Message.Text = null;
+                BotClient.SendTextMessageAsync(e.Message.Chat.Id, exception.Message);
             }
             
-            var currency = GetCurrencyDependsOnCountry(country);
-            var culture = GetCultureInfo(user.LanguageId);
-            var rm = new ResourceManager(typeof(Data.Translations.Content));
-            
-            var value = _currencyConverter.Convert(user.Currency + "/" + currency + "/" + amount).result.value;
-            BotClient.SendTextMessageAsync(e.Message.Chat.Id, rm.GetString("YouAreIn", culture) + country + ", " + amount + " " + user.Currency + rm.GetString("Is",culture) + value + " " + currency);
         }
 
         #endregion
@@ -101,7 +110,7 @@ namespace NotificationSystem.Services.Message
                 case "SE": currency = "sek"; break;//Sweden
                 case "DK": currency = "dkk"; break;//Denmark
                 case "NO": currency = "nok"; break;//Norway
-                case "JA": currency = "jpy"; break;//Japan
+                case "JP": currency = "jpy"; break;//Japan
                 case "RU": currency = "rub"; break;//Russia
                 case "CN": currency = "cny"; break;//China
                 case "HR": currency = "hrk"; break;//Croatia
@@ -138,7 +147,7 @@ namespace NotificationSystem.Services.Message
                     ES - Spain, {currency} : eur
                     CH - Swiss, {currency} : chf
                     US - United States, {currency} : usd
-                    GB - Great britian, {currency} : gbp
+                    GB - Great Britain, {currency} : gbp
                     AU - Australia, {currency} : aud
                     SE - Sweden, {currency} : sek
                     DK - Denmark, {currency} : dkk
@@ -186,16 +195,31 @@ namespace NotificationSystem.Services.Message
             {
                 case "eur": dynamicCurrency = responseExchangeList.result.eur; break;
                 case "cad": dynamicCurrency = responseExchangeList.result.cad; break;
+                case "usd": dynamicCurrency = responseExchangeList.result.usd; break;
+                case "chf": dynamicCurrency = responseExchangeList.result.chf; break;
+                case "gbp": dynamicCurrency = responseExchangeList.result.gbp; break;
+                case "aud": dynamicCurrency = responseExchangeList.result.aud; break;
+                case "sek": dynamicCurrency = responseExchangeList.result.sek; break;
+                case "dkk": dynamicCurrency = responseExchangeList.result.dkk; break;
+                case "nok": dynamicCurrency = responseExchangeList.result.nok; break;
+                case "jpy": dynamicCurrency = responseExchangeList.result.jpy; break;
+                case "cny": dynamicCurrency = responseExchangeList.result.cny; break;
+                case "hrk": dynamicCurrency = responseExchangeList.result.hrk; break;
+                case "kwd": dynamicCurrency = responseExchangeList.result.kwd; break;
+                case "pln": dynamicCurrency = responseExchangeList.result.pln; break;
                 case "czk": dynamicCurrency = responseExchangeList.result.czk; break;
+                case "huf": dynamicCurrency = responseExchangeList.result.huf; break;
+                case "bam": dynamicCurrency = responseExchangeList.result.bam; break;
+
                      default: dynamicCurrency = responseExchangeList.result.eur; break;   
             }
             
             
             var culture = GetCultureInfo(languageId);
             var rm = new ResourceManager(typeof(Data.Translations.Content));
-            return rm.GetString("Currency", culture) + currency + "\n" + rm.GetString("ForBuying", culture) + dynamicCurrency.kup + 
-                   "\n" + rm.GetString("ForSelling", culture) + dynamicCurrency.pro + "\n" + rm.GetString("Average", culture) +
-                   dynamicCurrency.sre;
+            return rm.GetString("Currency", culture) + currency + "\n" + rm.GetString("ForBuying", culture) + dynamicCurrency.kup + " rsd" + 
+                   "\n" + rm.GetString("ForSelling", culture) + dynamicCurrency.pro + " rsd" + "\n" + rm.GetString("Average", culture) +
+                   dynamicCurrency.sre + " rsd";
         }
 
 

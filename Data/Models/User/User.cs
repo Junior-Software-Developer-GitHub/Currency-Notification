@@ -11,7 +11,7 @@ namespace Data.Models.User
 
         public User()
         {
-            LanguageId = 1; //es
+            LanguageId = 0; //en
             Currency = "eur";// currency from users country
         }
         
