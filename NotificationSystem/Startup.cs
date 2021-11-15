@@ -68,7 +68,8 @@ namespace NotificationSystem
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new SchedulerService(new MessageService(new ExchangeRatesService(),new CurrencyConverter(), new LocationService()));
+           var scheduler =  new SchedulerService();
+           scheduler.Schedule(new MessageService(new ExchangeRatesService(), new CurrencyConverter(), new LocationService()));
         }
     }
 }
